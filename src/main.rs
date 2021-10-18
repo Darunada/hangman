@@ -19,7 +19,8 @@ fn start_game() {
                 loop {
                     
                     let mut buffer = String::new();
-                    let length = io::stdin().read_to_string(&mut buffer).unwrap();
+                    io::stdin().read_line(&mut buffer).unwrap();
+                    let length = buffer.trim().len();
                     println!("");
                 
                     if length == 1 {
