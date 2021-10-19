@@ -1,11 +1,11 @@
 
-use std::fmt::Display;
 
 use crate::hangman::wordlist::WordList;
 use crate::hangman::body::Body;
-
+use crate::hangman::letters::Letters;
 mod wordlist;
 mod body;
+mod letters;
 
 #[derive(Debug)]
 pub enum BadGuess {
@@ -14,82 +14,6 @@ pub enum BadGuess {
 }
 
 type GuessResult = Result<Option<char>, BadGuess>;
-
-#[derive(Debug)]
-struct Letter {
-    letter: char,
-    guessed: bool,
-}
-
-impl Letter {
-    fn guess(&mut self, guess: &char) -> GuessResult {
-        if self.letter.eq(guess) && self.guessed {
-            Err(BadGuess::Duplicate)
-        } else if self.letter.eq(guess) {
-            self.guessed = true;
-            Ok(Some(*guess))
-        } else {
-            Ok(None)
-        }
-    }
-}
-
-impl Display for Letter {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if self.guessed {
-            write!(f, "{}", self.letter)
-        } else {
-            write!(f, "_")
-        }
-    }
-}
-
-#[derive(Debug, Default)]
-struct Letters {
-    letters: Vec<Letter>,
-}
-
-impl Letters {
-    fn new(word: &str) -> Self {
-        let mut letters: Vec<Letter> = vec![];
-        for c in word.chars() {
-            letters.push(Letter {
-                letter: c,
-                guessed: false,
-            });
-        }
-
-        Letters { letters }
-    }
-
-    fn guess(&mut self, guess: &char) -> GuessResult {
-        let mut guess_results: Vec<GuessResult> = vec![];
-        for letter in self.letters.iter_mut() {
-            guess_results.push(letter.guess(guess));
-        }
-
-        let mut thinned: Vec<GuessResult> = guess_results.into_iter()
-                                                         .filter(|item| !matches!(item, Ok(None)))
-                                                         .collect();
-
-        // should now contain 0..n Err(BadGuess::Duplicate) or Some(chars)
-        if !thinned.is_empty() {
-            thinned.pop().unwrap()
-        } else {
-            Ok(None)
-        }
-    }
-}
-
-impl Display for Letters {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for letter in self.letters.iter() {
-            write!(f, "{} ", letter)?;
-        }
-        write!(f, "")
-    }
-}
-
 type Guesses = Vec<char>;
 
 #[derive(Debug)]
@@ -138,7 +62,7 @@ impl Hangman {
     } 
 
     fn is_guessed(&self) -> bool {
-        !self.letters.letters.iter().any(|letter| !letter.guessed )
+        self.letters.is_guessed()
     }
 }
 
