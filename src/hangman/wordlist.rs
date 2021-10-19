@@ -30,10 +30,6 @@ impl WordList {
         wordlist
     }
 
-    pub fn hash(&self) -> u64 {
-        self.hash
-    }
-
     pub fn get_random(&self) -> String {
         let mut rng = rand::thread_rng();
         let index = rng.gen_range(0..self.words.len());
@@ -41,8 +37,8 @@ impl WordList {
     }
 }
 
-impl Into<WordList> for Lines<BufReader<File>>  {
-    fn into(self) -> WordList {
-        WordList::new(self)
+impl From<Lines<BufReader<File>>> for WordList {
+    fn from(lines: Lines<BufReader<File>>) -> Self {
+        WordList::new(lines)
     }
 }
