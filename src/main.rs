@@ -1,5 +1,5 @@
 use hangman::{GameState, init, print_welcome, tick};
-use std::io::{self, Read};
+use std::io::{self};
 mod hangman;
 
 fn main() {
@@ -21,7 +21,7 @@ fn start_game() {
                     let mut buffer = String::new();
                     io::stdin().read_line(&mut buffer).unwrap();
                     let length = buffer.trim().len();
-                    println!("");
+                    println!();
                 
                     if length == 1 {
 

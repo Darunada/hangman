@@ -23,11 +23,11 @@ struct Letter {
 
 impl Letter {
     fn guess(&mut self, guess: &char) -> GuessResult {
-        if self.letter.eq(guess) && self.guessed == true {
+        if self.letter.eq(guess) && self.guessed {
             Err(BadGuess::Duplicate)
         } else if self.letter.eq(guess) {
             self.guessed = true;
-            Ok(Some(guess.clone()))
+            Ok(Some(*guess))
         } else {
             Ok(None)
         }
@@ -39,7 +39,7 @@ impl Display for Letter {
         if self.guessed {
             write!(f, "{}", self.letter)
         } else {
-            write!(f, "{}", '_')
+            write!(f, "_")
         }
     }
 }
@@ -68,13 +68,12 @@ impl Letters {
             guess_results.push(letter.guess(guess));
         }
 
-        let mut thinned: Vec<GuessResult> = guess_results.into_iter().filter(|item| match item {
-            Ok(None) => false,
-            _ => true,
-        }).collect();
+        let mut thinned: Vec<GuessResult> = guess_results.into_iter()
+                                                         .filter(|item| !matches!(item, Ok(None)))
+                                                         .collect();
 
         // should now contain 0..n Err(BadGuess::Duplicate) or Some(chars)
-        if thinned.len() > 0 {
+        if !thinned.is_empty() {
             thinned.pop().unwrap()
         } else {
             Ok(None)
@@ -130,24 +129,21 @@ impl Hangman {
         }
 
         let result = self.letters.guess(guess);
-        match result {
-            Ok(None) => {
-                self.guesses.push(guess.clone());
-                self.body.reveal();
-            },
-            _ => {},
+        if let Ok(None) = result {
+            self.guesses.push(*guess);
+            self.body.reveal();
         }
 
-        return result;
+        result
     } 
 
     fn is_guessed(&self) -> bool {
-        !self.letters.letters.iter().any(|letter| letter.guessed == false )
+        !self.letters.letters.iter().any(|letter| !letter.guessed )
     }
 }
 
 pub fn init() -> Hangman {
-    let word_list = WordList::from_path(&"words.txt").unwrap();
+    let word_list = WordList::from_path("words.txt").unwrap();
     let word: String = word_list.get_random();
 
     Hangman::new(word.as_str())
@@ -155,9 +151,9 @@ pub fn init() -> Hangman {
 
 pub fn tick(hangman: &Hangman) -> GameState {
     println!("{}", hangman.body);
-    println!("");
+    println!();
     println!("{}", hangman.letters);
-    println!("");
+    println!();
 
     if hangman.is_guessed() {
         println!("Congratulations!  You have won.");
