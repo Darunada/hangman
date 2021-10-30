@@ -7,6 +7,9 @@ check:
     circleci config validate
     cargo clippy --locked -- -D warnings
 
+ci-check:
+    cargo clippy --locked -- -D warnings
+
 test:
     cargo test --locked
     
