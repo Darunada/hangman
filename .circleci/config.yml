@@ -18,4 +18,4 @@ jobs:
                 just check
                 just test
 orbs:
-  lealearnstocode: lealearnstocode/build-orb@0.1.0
+  lealearnstocode: lealearnstocode/build-orb@0.2.0

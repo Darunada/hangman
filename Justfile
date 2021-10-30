@@ -4,6 +4,7 @@ _default:
     @just --list
 
 check:
+    circleci config validate
     cargo clippy --locked -- -D warnings
 
 test:
