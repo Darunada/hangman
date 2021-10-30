@@ -118,3 +118,38 @@ impl fmt::Display for Body {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::Body;
+
+    #[test]
+    fn starts_with_nothing_visible() {
+        let body = Body::new();
+        assert!(!body.head.visible);
+        assert!(!body.body.visible);
+        assert!(!body.left_arm.visible);
+        assert!(!body.right_arm.visible);
+        assert!(!body.left_leg.visible);
+        assert!(!body.right_leg.visible);
+    }
+
+    #[test]
+    fn shows_head_then_body_before_limbs() {
+        let mut body = Body::new();
+        body.reveal();
+        assert!(body.head.visible);
+        assert!(!body.body.visible);
+        assert!(!body.left_arm.visible);
+        assert!(!body.right_arm.visible);
+        assert!(!body.left_leg.visible);
+        assert!(!body.right_leg.visible);
+
+        body.reveal();
+        assert!(body.head.visible);
+        assert!(body.body.visible);
+        assert!(!body.left_arm.visible);
+        assert!(!body.right_arm.visible);
+        assert!(!body.left_leg.visible);
+        assert!(!body.right_leg.visible);
+    }
+}

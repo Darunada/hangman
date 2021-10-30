@@ -7,7 +7,7 @@ mod wordlist;
 mod body;
 mod letters;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum BadGuess {
     Duplicate,
     Invalid,

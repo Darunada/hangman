@@ -42,3 +42,24 @@ impl From<Lines<BufReader<File>>> for WordList {
         WordList::new(lines)
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::WordList;
+    
+    #[test]
+    fn loads_words_into_wordlist() {
+        let wordlist = WordList::from_path("test.words.txt").unwrap();
+        assert_eq!(wordlist.words.len(), 3);
+    }
+
+    #[test]
+    fn gets_a_random_word() {
+        let wordlist = WordList::from_path("test.words.txt").unwrap();
+        let valid_words = vec!["one", "two", "three"];
+        
+        let random = wordlist.get_random();
+        assert!(valid_words.contains(&random.as_str()));
+    }
+}
