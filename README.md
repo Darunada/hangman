@@ -1,6 +1,6 @@
 # Hangman #
 
-[![Rustc Version 1.55+](https://img.shields.io/badge/rustc-1.55+-lightgray.svg)](https://blog.rust-lang.org/2021/09/09/Rust-1.55.0.html)
+[![Rustc Version 1.56+](https://img.shields.io/badge/rustc-1.56+-lightgray.svg)](https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html) [![CircleCI](https://circleci.com/gh/LeaLearnsToCode/hangman/tree/main.svg?style=svg)](https://circleci.com/gh/LeaLearnsToCode/hangman/tree/main)
 
 Description
 --------------------------------------
